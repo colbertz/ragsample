@@ -20,8 +20,11 @@ This project demonstrates a basic implementation of Retrieval-Augmented Generati
    ```bash
    pip install meilisearch dashscope requests
    ```
-2. Ensure MeiliSearch is running locally and contains an index named `Buddhism`.
-3. Replace the placeholder API keys in the script with your actual keys:
+2. Ensure MeiliSearch is running locally and contains an index named `Buddhism`. References
+   - https://www.meilisearch.com/docs/learn/self_hosted/getting_started_with_self_hosted_meilisearch
+   - https://www.meilisearch.com/docs/learn/self_hosted/install_meilisearch_locally
+3. Please use jupyter notebook in this project or the index_meili.py to submit docs like 佛说阿弥陀经.chunks.json, into your meili search instance.
+4. Replace the placeholder API keys in the script with your actual keys:
    - MeiliSearch API key.
    - DashScope API key.
    - DeepSeek API key.
@@ -36,7 +39,7 @@ python search.py <your-question>
 
 #### Example:
 ```bash
-python search.py "What is the story of Su Dongpo?"
+python search.py 波斯匿王的故事
 ```
 
 #### Output:
@@ -47,7 +50,27 @@ python search.py "What is the story of Su Dongpo?"
 
 #### Sample Output:
 ```plaintext
-DeepSeek回答：Su Dongpo was a famous scholar in the Song Dynasty...
+DeepSeek回答：
+根据知识库内容，以下是关于波斯匿王的故事总结：
+
+1. **身份背景**  
+   - 波斯匿王是印度舍卫国的国王，与佛陀同年，有两个儿子：祇陀太子和琉璃王（《阿弥陀经》片段提及）。  
+   - 他是佛陀的大护法，在《楞严经》中被多次提及（知识库第4段）。
+
+2. **与佛陀的互动**  
+   - **减肥经历**：波斯匿王因肥胖问题请教佛陀，佛陀并未用神通，而是建议他“过午不食、早睡、戒宵夜”，最终成功 减肥（第2、4段）。  
+   - **生死困惑**：六十岁时因恐惧死亡求助佛陀。佛陀以“恒河之喻”开示他：能见的“自证分”（佛性）永恒不灭，肉身 （四大假合）才有生死。波斯匿王因此释怀，不再惧死（第1、2段）。  
+
+3. **家庭悲剧**  
+   - **篡位与死亡**：次子琉璃王受大臣怂恿篡位，关闭城门并派军队追杀波斯匿王。他流离失所，最终饿死途中（第3、5段）。  
+   - **因果释然**：作为佛弟子，波斯匿王接受此结局为因果业报，内心无痛苦（第3、5段）。  
+
+4. **其他关联事件**  
+   - **释迦族恩怨**：波斯匿王曾求娶释迦族女子，却被欺骗娶了婢女所生之子琉璃王。琉璃王因幼时在释迦族受辱，长 大后屠杀全族复仇（第7段）。  
+   - **黑光尊者事件**：波斯匿王得知阿罗汉迦留陀夷被山贼杀害并弃尸粪坑后，协助佛陀处理此事（第6段）。  
+
+**核心主题**：  
+波斯匿王的故事展现了佛法中“因果不虚”“安心知足”的教义。尽管贵为国王且为佛护法，他仍经历生老病死与家庭背叛，但通过佛陀的开示，他领悟到超越生死的佛性，获得内心的解脱。
 ```
 
 ### Notes
