@@ -4,6 +4,11 @@ import json
 import dashscope
 from http import HTTPStatus
 import requests
+from dotenv import load_dotenv
+import os
+
+# 加载环境变量
+load_dotenv()
 
 def print_rerank_results(reranked_results):
     if reranked_results:
@@ -20,7 +25,7 @@ def search_in_meili(question):
 
 def rerank_results(question, search_results):
     documents = [hit['content'] for hit in search_results['hits']]
-    dashscope.api_key = 'sk-'
+    dashscope.api_key = os.getenv('DASHSCOPE_API_KEY')
     resp = dashscope.TextReRank.call(
         model=dashscope.TextReRank.Models.gte_rerank,
         query=question,
@@ -48,7 +53,7 @@ def ask_deepseek(question, search_results, stream_callback=None):
 
     try:
         api_url = "https://api.deepseek.com/v1/chat/completions"
-        api_key = "sk-"
+        api_key = os.getenv('DEEPSEEK_API_KEY')
         
         headers = {
             "Authorization": f"Bearer {api_key}",
