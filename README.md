@@ -3,6 +3,9 @@
 
 This project demonstrates a basic implementation of Retrieval-Augmented Generation (RAG) using MeiliSearch for document retrieval, DashScope for reranking, and DeepSeek for generating answers based on retrieved knowledge. The workflow involves searching a knowledge base, reranking the results, and generating a response to a user query.
 
+# Demo
+This is a demo http://14.103.203.90
+
 ## Project Structure
 
 ### Python Files
