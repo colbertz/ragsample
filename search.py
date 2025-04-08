@@ -19,14 +19,8 @@ def search_in_meili(question):
     return search_results
 
 def rerank_results(question, search_results):
-    """
-    使用gte-rerank模型对文档进行相关性重排
-    :param query: 查询文本
-    :param documents: 待排序的文档列表
-    :return: 排序后的结果
-    """
     documents = [hit['content'] for hit in search_results['hits']]
-    dashscope.api_key = 'sk-...'
+    dashscope.api_key = 'sk-'
     resp = dashscope.TextReRank.call(
         model=dashscope.TextReRank.Models.gte_rerank,
         query=question,
@@ -42,7 +36,7 @@ def rerank_results(question, search_results):
         print(f'Request failed: {resp.code} - {resp.message}')
         return None
 
-def ask_deepseek(question, search_results):
+def ask_deepseek(question, search_results, stream_callback=None):
     knowledge = [result['document']['text'] for result in search_results]
     prompt = f'''你是一个智能助手，请总结知识库的内容来回答问题，请列举知识库中的数据详细回答。
         当所有知识库内容都与问题无关时，你的回答必须包括“知识库中未找到您要的答案！”这句话。
@@ -54,7 +48,7 @@ def ask_deepseek(question, search_results):
 
     try:
         api_url = "https://api.deepseek.com/v1/chat/completions"
-        api_key = "sk-..."
+        api_key = "sk-"
         
         headers = {
             "Authorization": f"Bearer {api_key}",
@@ -74,7 +68,6 @@ def ask_deepseek(question, search_results):
         
         with requests.post(api_url, headers=headers, json=payload, stream=True) as response:
             response.raise_for_status()
-            print("DeepSeek回答:\n", end="", flush=True)
             for chunk in response.iter_lines(decode_unicode=True):
                 if chunk.startswith("data: "):
                     chunk = chunk[6:]
@@ -82,15 +75,21 @@ def ask_deepseek(question, search_results):
                     data = json.loads(chunk)
                     if "choices" in data and data["choices"]:
                         token = data["choices"][0]["delta"].get("content", "")
-                        print(token, end="", flush=True)
+                        output(stream_callback, token)
                 except json.JSONDecodeError:
                     continue
-            print()
-
     except requests.exceptions.RequestException as e:
-        print(f"API请求失败: {str(e)}")
+        error_message = f"API请求失败: {str(e)}"
+        output(stream_callback, error_message)
     except Exception as e:
-        print(f"处理过程中发生错误: {str(e)}")
+        error_message = f"处理过程中发生错误: {str(e)}"
+        output(stream_callback, error_message)
+
+def output(callback, message):
+    if callback:
+        callback(message)
+    else:
+        print(message, end="", flush=True)
 
 def main():
     if len(sys.argv) != 2:
@@ -99,7 +98,6 @@ def main():
 
     question = sys.argv[1]
     
-    # Perform the search in MeiliSearch
     search_results = search_in_meili(question)
     reranked_results = json.loads(rerank_results(question, search_results))  
     # debug reranked_results
